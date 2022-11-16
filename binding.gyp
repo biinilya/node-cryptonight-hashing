@@ -110,6 +110,7 @@
                 "xmrig",
                 "xmrig/3rdparty/argon2/include",
                 "xmrig/3rdparty/argon2/lib",
+                "xmrig/crypto/common/portable/"
                 "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
