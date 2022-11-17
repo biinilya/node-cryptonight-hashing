@@ -73,10 +73,10 @@
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/3rdparty/argon2/arch/x86_64/lib/argon2-xop.c" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null || echo "xmrig/3rdparty/argon2/arch/generic/lib/argon2-arch.c" || echo)',
 
-                "xmrig/crypto/astrobwt/AstroBWT.cpp",
-                "xmrig/crypto/astrobwt/Salsa20.cpp",
-                "xmrig/crypto/astrobwt/sort_indices2.cpp",
-                "xmrig/crypto/astrobwt/salsa20_ref/salsa20.c",
+                # "xmrig/crypto/astrobwt/AstroBWT.cpp",
+                # "xmrig/crypto/astrobwt/Salsa20.cpp",
+                # "xmrig/crypto/astrobwt/sort_indices2.cpp",
+                # "xmrig/crypto/astrobwt/salsa20_ref/salsa20.c",
 
                 "xmrig/crypto/randomx/panthera/KangarooTwelve.c",
                 "xmrig/crypto/randomx/panthera/KeccakP-1600-reference.c",
