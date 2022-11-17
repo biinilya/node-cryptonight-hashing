@@ -52,7 +52,7 @@ extern "C" {
 #include "crypto/randomx/panthera/KangarooTwelve.h"
 }
 
-#include "crypto/rx/Profiler.h"
+#include "base/tools/Profiler.h"
 
 RandomX_ConfigurationWownero::RandomX_ConfigurationWownero()
 {

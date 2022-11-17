@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "crypto/randomx/reciprocal.h"
 #include "crypto/randomx/superscalar.hpp"
 #include "crypto/randomx/virtual_memory.hpp"
-#include "crypto/rx/Profiler.h"
+#include "base/tools/Profiler.h"
 
 #ifdef XMRIG_FIX_RYZEN
 #   include "crypto/rx/RxFix.h"

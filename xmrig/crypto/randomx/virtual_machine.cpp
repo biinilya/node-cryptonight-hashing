@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "crypto/randomx/common.hpp"
 #include "crypto/randomx/intrin_portable.h"
 #include "crypto/randomx/soft_aes.h"
-#include "crypto/rx/Profiler.h"
+#include "base/tools/Profiler.h"
 
 randomx_vm::~randomx_vm() {
 

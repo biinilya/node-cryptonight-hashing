@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "crypto/randomx/vm_compiled.hpp"
 #include "crypto/randomx/common.hpp"
-#include "crypto/rx/Profiler.h"
+#include "base/tools/Profiler.h"
 
 namespace randomx {
 
