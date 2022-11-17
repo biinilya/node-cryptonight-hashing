@@ -35,6 +35,7 @@
                 "xmrig/crypto/common/MemoryPool.cpp",
                 "xmrig/crypto/common/VirtualMemory.cpp",
                 "xmrig/crypto/common/VirtualMemory_unix.cpp",
+                "xmrig/crypto/common/HugePagesInfo.cpp",
 
                 "xmrig/crypto/randomx/aes_hash.cpp",
                 "xmrig/crypto/randomx/bytecode_machine.cpp",
