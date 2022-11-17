@@ -56,7 +56,6 @@
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86_static.S" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86.cpp" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null || echo "xmrig/crypto/randomx/jit_compiler_a64_static.S" || echo)',
-                '<!@(uname -a | grep "x86_64" >/dev/null || echo "xmrig/crypto/randomx/jit_compiler_a64.cpp" || echo)',
 
                 "xmrig/3rdparty/argon2/lib/argon2.c",
                 "xmrig/3rdparty/argon2/lib/core.c",
@@ -114,7 +113,7 @@
                 "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
-                '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto+fp+simd -flax-vector-conversions -DXMRIG_ARM=1 -DXMRIG_ARMv8=1" || (uname -a | grep "armv7" >/dev/null && echo "-mfpu=neon -flax-vector-conversions -DXMRIG_ARM=1" || echo "-march=native -DXMRIG_FEATURE_ASM"))',
+                '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto+fp+simd -flax-vector-conversions -DXMRIG_ARM=1 -DXMRIG_ARMv8=1" -D__aarch64__ || (uname -a | grep "armv7" >/dev/null && echo "-mfpu=neon -flax-vector-conversions -DXMRIG_ARM=1" || echo "-march=native -DXMRIG_FEATURE_ASM"))',
                 '<!@(./check_cpu.sh intel && echo -DCPU_INTEL || (./check_cpu.sh amd && (./check_cpu.sh amdnew && echo -DCPU_AMD || echo -DCPU_AMD_OLD) || echo))',
                 '<!@(./check_cpu.sh avx2 && echo -DHAVE_AVX2 || echo)',
                 '<!@(./check_cpu.sh sse2 && echo -DHAVE_SSE2 || echo)',
@@ -124,7 +123,7 @@
                 "-std=gnu11      -fPIC -DNDEBUG -Ofast -fno-fast-math -w"
             ],
             "cflags_cc": [
-                '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto+fp+simd -flax-vector-conversions -DXMRIG_ARM=1 -DXMRIG_ARMv8=1" || (uname -a | grep "armv7" >/dev/null && echo "-mfpu=neon -flax-vector-conversions -DXMRIG_ARM=1" || echo "-march=native -DXMRIG_FEATURE_ASM"))',
+                '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto+fp+simd -flax-vector-conversions -DXMRIG_ARM=1 -DXMRIG_ARMv8=1" -D__aarch64__ || (uname -a | grep "armv7" >/dev/null && echo "-mfpu=neon -flax-vector-conversions -DXMRIG_ARM=1" || echo "-march=native -DXMRIG_FEATURE_ASM"))',
                 '<!@(./check_cpu.sh intel && echo -DCPU_INTEL || (./check_cpu.sh amd && (./check_cpu.sh amdnew && echo -DCPU_AMD || echo -DCPU_AMD_OLD) || echo))',
                 "-std=gnu++11 -s -fPIC -DNDEBUG -Ofast -fno-fast-math -fexceptions -fno-rtti -Wno-class-memaccess -w"
             ],

@@ -33,6 +33,6 @@ check_linux() {
 }
 
 case "$(uname -a)" in
-  aarch64*) check_mac "$QUERY" ;;
+  Darwin*) check_mac "$QUERY" ;;
   *) check_linux "$QUERY" ;;
 esac
