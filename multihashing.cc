@@ -22,7 +22,7 @@
 #include "crypto/cn/CnHash.h"
 #include "crypto/randomx/configuration.h"
 #include "crypto/randomx/randomx.h"
-// #include "crypto/astrobwt/AstroBWT.h"
+#include "crypto/astrobwt/AstroBWT.h"
 #include "crypto/kawpow/KPHash.h"
 #include "3rdparty/libethash/ethash.h"
 #include "crypto/ghostrider/ghostrider.h"
@@ -259,13 +259,13 @@ static xmrig::cn_hash_fun get_argon2_fn(const int algo) {
   }
 }
 
-// static xmrig::cn_hash_fun get_astrobwt_fn(const int algo) {
-//   switch (algo) {
-//     case 0:  return FN(ASTROBWT_DERO);
-//     case 1:  return FN(ASTROBWT_DERO_2);
-//     default: return FN(ASTROBWT_DERO);
-//   }
-// }
+static xmrig::cn_hash_fun get_astrobwt_fn(const int algo) {
+  switch (algo) {
+    case 0:  return FN(ASTROBWT_DERO);
+    case 1:  return FN(ASTROBWT_DERO_2);
+    default: return FN(ASTROBWT_DERO);
+  }
+}
 
 NAN_METHOD(cryptonight) {
     if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
@@ -405,28 +405,28 @@ NAN_METHOD(argon2) {
     info.GetReturnValue().Set(returnValue);
 }
 
-// NAN_METHOD(astrobwt) {
-//     if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
+NAN_METHOD(astrobwt) {
+    if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
 
-//     v8::Isolate *isolate = v8::Isolate::GetCurrent();
-//     Local<Object> target = info[0]->ToObject(isolate->GetCurrentContext()).ToLocalChecked();
-//     if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 1 should be a buffer object.");
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    Local<Object> target = info[0]->ToObject(isolate->GetCurrentContext()).ToLocalChecked();
+    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 1 should be a buffer object.");
 
-//     int algo = 0;
+    int algo = 0;
 
-//     if (info.Length() >= 2) {
-//         if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
-//         algo = Nan::To<int>(info[1]).FromMaybe(0);
-//     }
+    if (info.Length() >= 2) {
+        if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        algo = Nan::To<int>(info[1]).FromMaybe(0);
+    }
 
-//     const xmrig::cn_hash_fun fn = get_astrobwt_fn(algo);
+    const xmrig::cn_hash_fun fn = get_astrobwt_fn(algo);
 
-//     char output[32];
-//     fn(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx, 0);
+    char output[32];
+    fn(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx, 0);
 
-//     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
-//     info.GetReturnValue().Set(returnValue);
-// }
+    v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
+    info.GetReturnValue().Set(returnValue);
+}
 
 NAN_METHOD(k12) {
     if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
@@ -760,6 +760,7 @@ NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight_pico").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico)).ToLocalChecked());
     Nan::Set(target, Nan::New("randomx").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(randomx)).ToLocalChecked());
     Nan::Set(target, Nan::New("argon2").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(argon2)).ToLocalChecked());
+    Nan::Set(target, Nan::New("astrobwt").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(astrobwt)).ToLocalChecked());
     Nan::Set(target, Nan::New("k12").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(k12)).ToLocalChecked());
     Nan::Set(target, Nan::New("c29s").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(c29s)).ToLocalChecked());
     Nan::Set(target, Nan::New("c29v").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(c29v)).ToLocalChecked());
