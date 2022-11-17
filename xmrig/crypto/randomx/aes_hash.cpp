@@ -28,12 +28,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <thread>
 #include <vector>
+#include <array>
 
 #include "crypto/randomx/aes_hash.hpp"
-#include "crypto/randomx/soft_aes.h"
-#include "crypto/randomx/randomx.h"
 #include "base/tools/Chrono.h"
-#include "base/tools/Profiler.h"
+#include "crypto/randomx/randomx.h"
+#include "crypto/randomx/soft_aes.h"
+#include "crypto/rx/Profiler.h"
 
 #define AES_HASH_1R_STATE0 0xd7983aad, 0xcc82db47, 0x9fa856de, 0x92b52c0d
 #define AES_HASH_1R_STATE1 0xace78057, 0xf59e125a, 0x15c7b798, 0x338d996e
@@ -370,8 +371,8 @@ hashAndFillAes1Rx4_impl* softAESImpl = &hashAndFillAes1Rx4<1,1>;
 
 void SelectSoftAESImpl(size_t threadsCount)
 {
-  constexpr int test_length_ms = 100;
-  const std::vector<hashAndFillAes1Rx4_impl *> impl = {
+  constexpr uint64_t test_length_ms = 100;
+  const std::array<hashAndFillAes1Rx4_impl *, 4> impl = {
     &hashAndFillAes1Rx4<1,1>,
     &hashAndFillAes1Rx4<2,1>,
     &hashAndFillAes1Rx4<2,2>,
@@ -381,7 +382,7 @@ void SelectSoftAESImpl(size_t threadsCount)
   double fast_speed = 0.0;
   for (size_t run = 0; run < 3; ++run) {
     for (size_t i = 0; i < impl.size(); ++i) {
-      const uint64_t t1 = xmrig::Chrono::highResolutionMSecs();
+      const double t1 = uvc::Chrono::highResolutionMSecs();
       std::vector<uint32_t> count(threadsCount, 0);
       std::vector<std::thread> threads;
       for (size_t t = 0; t < threadsCount; ++t) {
@@ -392,7 +393,7 @@ void SelectSoftAESImpl(size_t threadsCount)
           do {
           (*impl[i])(scratchpad.data(), scratchpad.size(), hash, state);
           ++count[t];
-          } while (xmrig::Chrono::highResolutionMSecs() - t1 < test_length_ms);
+          } while (uvc::Chrono::highResolutionMSecs() - t1 < test_length_ms);
         });
       }
       uint32_t total = 0;
@@ -400,7 +401,7 @@ void SelectSoftAESImpl(size_t threadsCount)
         threads[t].join();
         total += count[t];
       }
-      const uint64_t t2 = xmrig::Chrono::highResolutionMSecs();
+      const double t2 = uvc::Chrono::highResolutionMSecs();
       const double speed = total * 1e3 / (t2 - t1);
       if (speed > fast_speed) {
         fast_idx = i;
