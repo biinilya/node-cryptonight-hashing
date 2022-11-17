@@ -197,13 +197,13 @@ namespace randomx {
 	void JitCompilerX86::enableWriting() const {
 		uint8_t* p1 = alignToPage(code, 4096);
 		uint8_t* p2 = code + CodeSize;
-		uvc::VirtualMemory::protectRW(p1, p2 - p1);
+		xmrig::VirtualMemory::protectRW(p1, p2 - p1);
 	}
 
 	void JitCompilerX86::enableExecution() const {
 		uint8_t* p1 = alignToPage(code, 4096);
 		uint8_t* p2 = code + CodeSize;
-		uvc::VirtualMemory::protectRX(p1, p2 - p1);
+		xmrig::VirtualMemory::protectRX(p1, p2 - p1);
 	}
 
 #	ifdef _MSC_VER
@@ -216,10 +216,10 @@ namespace randomx {
 	constexpr size_t codeOffsetIncrement = 59 * 64;
 
 	JitCompilerX86::JitCompilerX86(bool hugePagesEnable, bool optimizedInitDatasetEnable) {
-		BranchesWithin32B = uvc::Cpu::info()->jccErratum();
+		BranchesWithin32B = xmrig::Cpu::info()->jccErratum();
 
-		hasAVX = uvc::Cpu::info()->hasAVX();
-		hasAVX2 = uvc::Cpu::info()->hasAVX2();
+		hasAVX = xmrig::Cpu::info()->hasAVX();
+		hasAVX2 = xmrig::Cpu::info()->hasAVX2();
 
 		// Disable by default
 		initDatasetAVX2 = false;
@@ -233,27 +233,27 @@ namespace randomx {
 				initDatasetAVX2 = true;
 			}
 			else if (optimizedDatasetInit < 0) {
-				uvc::ICpuInfo::Vendor vendor = uvc::Cpu::info()->vendor();
-				uvc::ICpuInfo::Arch arch = uvc::Cpu::info()->arch();
+				xmrig::ICpuInfo::Vendor vendor = xmrig::Cpu::info()->vendor();
+				xmrig::ICpuInfo::Arch arch = xmrig::Cpu::info()->arch();
 
-				if (vendor == uvc::ICpuInfo::VENDOR_INTEL) {
+				if (vendor == xmrig::ICpuInfo::VENDOR_INTEL) {
 					// AVX2 init is faster on Intel CPUs without HT
-					initDatasetAVX2 = (uvc::Cpu::info()->cores() == uvc::Cpu::info()->threads());
+					initDatasetAVX2 = (xmrig::Cpu::info()->cores() == xmrig::Cpu::info()->threads());
 				}
-				else if (vendor == uvc::ICpuInfo::VENDOR_AMD) {
+				else if (vendor == xmrig::ICpuInfo::VENDOR_AMD) {
 					switch (arch) {
-					case uvc::ICpuInfo::ARCH_ZEN:
-					case uvc::ICpuInfo::ARCH_ZEN_PLUS:
+					case xmrig::ICpuInfo::ARCH_ZEN:
+					case xmrig::ICpuInfo::ARCH_ZEN_PLUS:
 					default:
 						// AVX2 init is slower on Zen/Zen+
 						// Also disable it for other unknown architectures
 						initDatasetAVX2 = false;
 						break;
-					case uvc::ICpuInfo::ARCH_ZEN2:
+					case xmrig::ICpuInfo::ARCH_ZEN2:
 						// AVX2 init is faster on Zen2 without SMT (mobile CPUs)
-						initDatasetAVX2 = (uvc::Cpu::info()->cores() == uvc::Cpu::info()->threads());
+						initDatasetAVX2 = (xmrig::Cpu::info()->cores() == xmrig::Cpu::info()->threads());
 						break;
-					case uvc::ICpuInfo::ARCH_ZEN3:
+					case xmrig::ICpuInfo::ARCH_ZEN3:
 						// AVX2 init is faster on Zen3
 						initDatasetAVX2 = true;
 						break;
@@ -267,7 +267,7 @@ namespace randomx {
 			initDatasetAVX2 = false;
 		}
 
-		hasXOP = uvc::Cpu::info()->hasXOP();
+		hasXOP = xmrig::Cpu::info()->hasXOP();
 
 		allocatedSize = initDatasetAVX2 ? (CodeSize * 4) : (CodeSize * 2);
 		allocatedCode = static_cast<uint8_t*>(allocExecutableMemory(allocatedSize,
@@ -424,7 +424,7 @@ namespace randomx {
 		}
 
 #		ifdef XMRIG_FIX_RYZEN
-		uvc::RxFix::setMainLoopBounds(mainLoopBounds);
+		xmrig::RxFix::setMainLoopBounds(mainLoopBounds);
 #		endif
 
 		imul_rcp_storage = code + (ADDR(randomx_program_imul_rcp_store) - codePrologue) + 2;

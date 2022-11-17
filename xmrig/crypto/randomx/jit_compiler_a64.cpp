@@ -171,7 +171,7 @@ void JitCompilerA64::generateProgram(Program& program, ProgramConfiguration& con
 	emit32(ARMV8A::EOR | 10 | (IntRegMap[config.readReg0] << 5) | (IntRegMap[config.readReg1] << 16), code, codePos);
 
 #	ifndef XMRIG_OS_APPLE
-	uvc::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code + MainLoopBegin), codePos - MainLoopBegin);
+	xmrig::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code + MainLoopBegin), codePos - MainLoopBegin);
 #	endif
 }
 
@@ -237,7 +237,7 @@ void JitCompilerA64::generateProgramLight(Program& program, ProgramConfiguration
 	emit32(ARMV8A::ADD_IMM_HI | 2 | (2 << 5) | (imm_hi << 10), code, codePos);
 
 #	ifndef XMRIG_OS_APPLE
-	uvc::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code + MainLoopBegin), codePos - MainLoopBegin);
+	xmrig::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code + MainLoopBegin), codePos - MainLoopBegin);
 #	endif
 }
 
@@ -364,7 +364,7 @@ void JitCompilerA64::generateSuperscalarHash(SuperscalarProgram(&programs)[N])
 	codePos += p2 - p1;
 
 #	ifndef XMRIG_OS_APPLE
-	uvc::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code + CodeSize), codePos - MainLoopBegin);
+	xmrig::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code + CodeSize), codePos - MainLoopBegin);
 #	endif
 }
 
@@ -386,12 +386,12 @@ size_t JitCompilerA64::getCodeSize()
 
 void JitCompilerA64::enableWriting() const
 {
-	uvc::VirtualMemory::protectRW(code, allocatedSize);
+	xmrig::VirtualMemory::protectRW(code, allocatedSize);
 }
 
 void JitCompilerA64::enableExecution() const
 {
-	uvc::VirtualMemory::protectRX(code, allocatedSize);
+	xmrig::VirtualMemory::protectRX(code, allocatedSize);
 }
 
 
@@ -403,7 +403,7 @@ void JitCompilerA64::allocate(size_t size)
 	memcpy(code, reinterpret_cast<const void *>(randomx_program_aarch64), CodeSize);
 
 #	ifndef XMRIG_OS_APPLE
-	uvc::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code), CodeSize);
+	xmrig::VirtualMemory::flushInstructionCache(reinterpret_cast<char*>(code), CodeSize);
 #	endif
 }
 
